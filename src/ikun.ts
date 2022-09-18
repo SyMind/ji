@@ -154,7 +154,6 @@ class IKun {
         const touch = 'targetTouches' in event ? event.touches[0] : event
         const rect = this.container.getBoundingClientRect()
         const leftCenter = rect.left + rect.width / 2
-        const topCenter = rect.height / 2 - this.height / 2;
         const { pageX, pageY } = touch
 
         const x = pageX - leftCenter

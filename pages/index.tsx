@@ -17,7 +17,12 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <a className={styles.btn} target="_blank" href='https://github.com/SyMind/ji'>
+      <a
+        className={styles.btn}
+        rel="noreferrer"
+        target="_blank"
+        href='https://github.com/SyMind/ji'
+      >
         <span className={styles.github} />
       </a>
       <div className={styles.container}>
