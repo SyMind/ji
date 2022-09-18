@@ -1,5 +1,11 @@
+.container {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 .stage {
     position: absolute;
     bottom: 0;
 }
-

@@ -189,20 +189,30 @@ class IKun {
 
     play = () => {
         const {transient, dancing, crazy} = this.audio
-        if (Math.abs(this.v.r) <= 4) {
+        if (Math.abs(this.v.r) <= 6) {
+            transient.currentTime = 0
             transient.play()
+            dancing.pause()
+            crazy.pause()
         }
-        if (Math.abs(this.v.r) > 4 && Math.abs(this.v.r) <= 30) {
+        if (Math.abs(this.v.r) > 6 && Math.abs(this.v.r) <= 30) {
+            dancing.currentTime = 0
             dancing.play()
+            transient.pause()
+            crazy.pause()
         }
         if (Math.abs(this.v.r) > 30) {
+            crazy.currentTime = 0
             crazy.play()
+            transient.pause()
+            dancing.pause()
         }
     }
 
     draw = () => {
         const { r, y } = this.v
-        this.image.style.transform = `rotate(${r}deg) translateX(${r}px) translateY(${y}px)`
+        const x = r * 5
+        this.image.style.transform = `rotate(${r}deg) translateX(${x}px) translateY(${y}px)`
 
         const {context, width, height} = this
 
@@ -219,7 +229,7 @@ class IKun {
         )
         context.moveTo(
             0,
-            140
+            200
         )
     
         const cx = 0
@@ -254,13 +264,8 @@ class IKun {
 
         const now = Date.now()
 
-        if (!this.last) {
-            this.last = now
-            return
-        }
-
         let i = this.inertia
-        const delta = now - this.last
+        const delta = this.last ? now - this.last : 16
         if(delta < 16){ // 如果单帧间隔超过 16ms 那就躺平不处理
             i = i / FRAME * delta
         }
@@ -278,7 +283,7 @@ class IKun {
         this.v.t = t * d
         this.v.y = y
 
-        // 小于一定动作时停止重绘 #20
+        // 小于一定动作时停止重绘
         if(
             Math.max(
                 Math.abs(this.v.w),
