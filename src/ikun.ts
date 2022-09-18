@@ -154,6 +154,7 @@ class IKun {
         const touch = 'targetTouches' in event ? event.touches[0] : event
         const rect = this.container.getBoundingClientRect()
         const leftCenter = rect.left + rect.width / 2
+        const topCenter = rect.height / 2 - this.height / 2;
         const { pageX, pageY } = touch
 
         const x = pageX - leftCenter
@@ -164,7 +165,8 @@ class IKun {
         r = Math.max(-this.maxR, r)
         r = Math.min(this.maxR, r)
 
-        y = y * this.sticky * 2
+        // y = y * this.sticky * 2
+        y = (y - 170) * this.sticky * 2 // TODO 这里的处理有问题
 
         y = Math.max(-this.maxY, y)
         y = Math.min(this.maxY, y)
