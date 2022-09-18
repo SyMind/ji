@@ -196,13 +196,13 @@ class IKun {
             dancing.pause()
             crazy.pause()
         }
-        if (Math.abs(this.v.r) > 6 && Math.abs(this.v.r) <= 30) {
+        if (Math.abs(this.v.r) > 6 && Math.abs(this.v.r) <= 20) {
             dancing.currentTime = 0
             dancing.play()
             transient.pause()
             crazy.pause()
         }
-        if (Math.abs(this.v.r) > 30) {
+        if (Math.abs(this.v.r) > 20) {
             crazy.currentTime = 0
             crazy.play()
             transient.pause()
