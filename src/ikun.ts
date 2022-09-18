@@ -12,11 +12,22 @@ const EVENT_TYPE: Record<string, number> = {
     mousemove: MOUSE_EVENT,
     mouseup: MOUSE_EVENT,
     mouseleave: MOUSE_EVENT
-  }
+}
+
+// 坐标旋转
+const rotatePoint = (cx: number, cy: number, x: number, y: number, angle: number): {x: number, y: number} => {
+    const radians = (Math.PI / 180) * angle
+    const cos = Math.cos(radians)
+    const sin = Math.sin(radians)
+    const nx = (cos * (x - cx)) + (sin * (y - cy)) + cx
+    const ny = (cos * (y - cy)) - (sin * (x - cx)) + cy
+    return {
+        x: nx, 
+        y: ny
+    }
+}
 
 class IKun {
-    container: HTMLElement
-
     v = {
         r: 12, // 角度
         y: 2, // 高度
@@ -34,12 +45,19 @@ class IKun {
     initiated: number | false = false
     pageX: number = 0
 
+    container: HTMLElement
+    canvas: HTMLCanvasElement
+    context: CanvasRenderingContext2D
     image: HTMLImageElement
+    outline: HTMLDivElement
     audio: {
         transient: HTMLAudioElement
         dancing: HTMLAudioElement
         crazy: HTMLAudioElement
     }
+
+    height = 800
+    width = 500
 
     constructor(container: HTMLElement) {
         this.audio = {
@@ -47,20 +65,39 @@ class IKun {
             dancing: new Audio('/jntm.mp3'),
             crazy: new Audio('/ngm.mp3')
         }
+        const {height, width} = this
+        this.container = container
+        container.style.position = 'relative'
+        container.style.height = height + 'px'
+        container.style.width = width + 'px'
 
         const image = this.image = new Image(197, 300)
         image.src = 'kun.png'
 
-        this.container = container
+        const outline = this.outline = document.createElement('div')
+        outline.style.position = 'absolute'
+        outline.style.left = '50%'
+        outline.style.top = '50%'
+        outline.style.transform = 'translate(-50%, -50%)'
+        outline.appendChild(image)
+
+        const canvas = this.canvas = document.createElement('canvas')
+        canvas.width = width
+        canvas.height = height
+        canvas.style.width = width + 'px'
+        canvas.style.height = height + 'px'
+
+        const context = this.context = canvas.getContext('2d')!
+        context.setTransform(1, 0, 0, 1, 0, 0)
 
         this.mount()
     }
 
     mount() {
-        const {image, container} = this
+        const {outline, container} = this
 
-        image.addEventListener('mousedown', this.start)
-        image.addEventListener('touchstart', this.start)
+        outline.addEventListener('mousedown', this.start)
+        outline.addEventListener('touchstart', this.start)
         document.addEventListener('mousemove', this.move)
         document.addEventListener('touchmove', this.move)
         document.addEventListener('mouseup', this.end)
@@ -68,14 +105,15 @@ class IKun {
         document.addEventListener('touchcancel', this.end)
         document.addEventListener('touchend', this.end)
 
-        container.appendChild(this.image)
+        container.appendChild(outline)
+        container.appendChild(this.canvas)
     }
 
     dispose = () => {
-        const {image, container} = this
+        const {outline, container} = this
 
-        image.removeEventListener('mousedown', this.start)
-        image.removeEventListener('touchstart', this.start)
+        outline.removeEventListener('mousedown', this.start)
+        outline.removeEventListener('touchstart', this.start)
         document.removeEventListener('mousemove', this.move)
         document.removeEventListener('touchmove', this.move)
         document.removeEventListener('mouseup', this.end)
@@ -83,7 +121,8 @@ class IKun {
         document.removeEventListener('touchcancel', this.end)
         document.removeEventListener('touchend', this.end)
 
-        container.removeChild(this.image)
+        container.removeChild(outline)
+        container.removeChild(this.canvas)
     }
 
     start = (event: TouchEvent | MouseEvent) => {
@@ -111,7 +150,7 @@ class IKun {
         }
 
         const touch = 'targetTouches' in event ? event.touches[0] : event
-        const rect = this.image.getBoundingClientRect()
+        const rect = this.container.getBoundingClientRect()
         const leftCenter = rect.left + rect.width / 2
         const { pageX, pageY } = touch
 
@@ -123,7 +162,7 @@ class IKun {
         r = Math.max(-this.maxR, r)
         r = Math.min(this.maxR, r)
 
-        y = y * this.sticky * 2;
+        y = y * this.sticky * 2
 
         y = Math.max(-this.maxY, y)
         y = Math.min(this.maxY, y)
@@ -160,9 +199,52 @@ class IKun {
     }
 
     draw = () => {
-        let { r, y } = this.v
+        const { r, y } = this.v
         const x = r * 1
         this.image.style.transform = `rotate(${r}deg) translateX(${x}px) translateY(${y}px)`
+
+        const {context, canvas} = this
+        const {width, height} = canvas
+
+        context.clearRect(0, 0, width, height)
+        context.save()
+    
+        context.strokeStyle = '#182562'
+        context.lineWidth = 10
+    
+        context.beginPath()
+        context.translate(
+            width / 2 ,
+            640 // height - 160
+        )
+        context.moveTo(
+            0,
+            140
+        )
+    
+        const cx = 0
+        const cy = -100
+    
+        const n = rotatePoint(
+            cx,
+            cy,
+            x,
+            -y,
+            r
+        )
+    
+        const nx = n.x
+        const ny = -n.y - 100
+        
+        context.quadraticCurveTo(
+            0,
+            75,
+            nx,
+            ny
+        )
+
+        context.stroke()
+        context.restore()
     }
 
     run = () => {
