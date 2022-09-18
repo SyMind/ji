@@ -61,9 +61,9 @@ class IKun {
 
     constructor(container: HTMLElement) {
         this.audio = {
-            transient: new Audio('/j.mp3'),
-            dancing: new Audio('/jntm.mp3'),
-            crazy: new Audio('/ngm.mp3')
+            transient: new Audio(`${process.env.ASSET_PREFIX}/j.mp3`),
+            dancing: new Audio(`${process.env.ASSET_PREFIX}/jntm.mp3`),
+            crazy: new Audio(`${process.env.ASSET_PREFIX}/ngm.mp3`)
         }
         const {height, width} = this
         this.container = container
