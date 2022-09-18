@@ -16,9 +16,14 @@ const Home: NextPage = () => {
   }, [])
 
   return (
-    <div className={styles.container}>
-      <div className={styles.stage} ref={container} />
-    </div>
+    <>
+      <a className={styles.btn} target="_blank" href='https://github.com/SyMind/ji'>
+        <span className={styles.github} />
+      </a>
+      <div className={styles.container}>
+        <div className={styles.stage} ref={container} />
+      </div>
+    </>
   )
 }
 
