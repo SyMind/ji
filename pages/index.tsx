@@ -15,7 +15,7 @@ const Home: NextPage = () => {
     }
   }, [])
 
-  return <div ref={container} />
+  return <div className={styles.stage} ref={container} />
 }
 
 export default Home

@@ -81,14 +81,16 @@ class IKun {
         outline.style.transform = 'translate(-50%, -50%)'
         outline.appendChild(image)
 
+        const dpr = window.devicePixelRatio || 1
         const canvas = this.canvas = document.createElement('canvas')
-        canvas.width = width
-        canvas.height = height
+        canvas.width = width * dpr
+        canvas.height = height * dpr
         canvas.style.width = width + 'px'
         canvas.style.height = height + 'px'
 
         const context = this.context = canvas.getContext('2d')!
         context.setTransform(1, 0, 0, 1, 0, 0)
+        context.scale(dpr, dpr)
 
         this.mount()
     }
@@ -200,11 +202,9 @@ class IKun {
 
     draw = () => {
         const { r, y } = this.v
-        const x = r * 1
-        this.image.style.transform = `rotate(${r}deg) translateX(${x}px) translateY(${y}px)`
+        this.image.style.transform = `rotate(${r}deg) translateX(${r}px) translateY(${y}px)`
 
-        const {context, canvas} = this
-        const {width, height} = canvas
+        const {context, width, height} = this
 
         context.clearRect(0, 0, width, height)
         context.save()
@@ -228,7 +228,7 @@ class IKun {
         const n = rotatePoint(
             cx,
             cy,
-            x,
+            r,
             -y,
             r
         )

@@ -1,5 +1,5 @@
-.kun {
-    display: flex;
-    flex-direction: column;
+.stage {
+    position: absolute;
+    bottom: 0;
 }
 
