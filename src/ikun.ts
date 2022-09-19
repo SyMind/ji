@@ -44,6 +44,7 @@ class IKun {
     rotate = 0
     initiated: number | false = false
     pageX: number = 0
+    pageY: number = 0
 
     container: HTMLElement
     canvas: HTMLCanvasElement
@@ -137,6 +138,7 @@ class IKun {
 
         const touch = 'targetTouches' in event ? event.touches[0] : event
         this.pageX = touch.pageX
+        this.pageY = touch.pageY
 
         // 确保通过用户触发事件获得音频播放授权
         const {transient, dancing, crazy} = this.audio
@@ -152,12 +154,12 @@ class IKun {
         }
 
         const touch = 'targetTouches' in event ? event.touches[0] : event
-        const rect = this.container.getBoundingClientRect()
+        const rect = this.image.getBoundingClientRect()
         const leftCenter = rect.left + rect.width / 2
         const { pageX, pageY } = touch
 
         const x = pageX - leftCenter
-        let y = pageY - this.pageX
+        let y = pageY - this.pageY
        
         let r = x * this.sticky
 
@@ -165,7 +167,7 @@ class IKun {
         r = Math.min(this.maxR, r)
 
         // y = y * this.sticky * 2
-        y = (y - 170) * this.sticky * 2 // TODO 这里的处理有问题
+        y = y // TODO 这里的处理有问题
 
         y = Math.max(-this.maxY, y)
         y = Math.min(this.maxY, y)
