@@ -166,8 +166,7 @@ class IKun {
         r = Math.max(-this.maxR, r)
         r = Math.min(this.maxR, r)
 
-        // y = y * this.sticky * 2
-        y = y // TODO 这里的处理有问题
+        y = y * this.sticky * 3
 
         y = Math.max(-this.maxY, y)
         y = Math.min(this.maxY, y)
