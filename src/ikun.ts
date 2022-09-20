@@ -108,7 +108,12 @@ class IKun {
     }
 
     setMuted = (muted: boolean): void => {
-        Object.values(this.audio).forEach(item => item.muted = muted)
+        Object.values(this.audio).forEach(item => {
+            item.muted = true
+            item.play()
+            item.pause()
+            item.muted = muted
+        })
         this.muted = muted
     }
 
