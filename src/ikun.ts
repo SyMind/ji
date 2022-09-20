@@ -35,6 +35,8 @@ interface IKunOptions {
 class IKun {
     muted: boolean
 
+    count = 0
+
     v = {
         r: 12, // 角度
         y: 2, // 高度
@@ -202,20 +204,26 @@ class IKun {
     }
 
     play = () => {
+        this.count++
+
         const {transient, dancing, crazy} = this.audio
-        if (Math.abs(this.v.r) <= 6) {
+        if (this.count > 2) {
+            this.count = 0;
+            crazy.currentTime = 0
+            crazy.play()
+            transient.pause()
+            dancing.pause()
+        } else if (Math.abs(this.v.r) <= 6) {
             transient.currentTime = 0
             transient.play()
             dancing.pause()
             crazy.pause()
-        }
-        if (Math.abs(this.v.r) > 6 && Math.abs(this.v.r) <= 30) {
+        } else if (Math.abs(this.v.r) > 6 && Math.abs(this.v.r) <= 30) {
             dancing.currentTime = 0
             dancing.play()
             transient.pause()
             crazy.pause()
-        }
-        if (Math.abs(this.v.r) > 30) {
+        } else if (Math.abs(this.v.r) > 30) {
             crazy.currentTime = 0
             crazy.play()
             transient.pause()
