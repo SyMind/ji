@@ -27,7 +27,14 @@ const rotatePoint = (cx: number, cy: number, x: number, y: number, angle: number
     }
 }
 
+interface IKunOptions {
+    container: HTMLElement
+    muted?: boolean
+} 
+
 class IKun {
+    muted: boolean
+
     v = {
         r: 12, // 角度
         y: 2, // 高度
@@ -60,7 +67,9 @@ class IKun {
     height = 800
     width = 500
 
-    constructor(container: HTMLElement) {
+    constructor({container, muted = false}: IKunOptions) {
+        this.muted = muted
+
         this.audio = {
             transient: new Audio(`${process.env.ASSET_PREFIX}/j.mp3`),
             dancing: new Audio(`${process.env.ASSET_PREFIX}/jntm.mp3`),
@@ -94,6 +103,11 @@ class IKun {
         context.scale(dpr, dpr)
 
         this.mount()
+    }
+
+    setMuted = (muted: boolean): void => {
+        Object.values(this.audio).forEach(item => item.muted = muted)
+        this.muted = muted
     }
 
     mount() {
@@ -142,13 +156,12 @@ class IKun {
 
         // 确保通过用户触发事件获得音频播放授权
         const {transient, dancing, crazy} = this.audio
-        transient.muted = false
-        dancing.muted = false
-        crazy.muted = false
+        transient.muted = this.muted
+        dancing.muted = this.muted
+        crazy.muted = this.muted
     }
 
     move = (event: TouchEvent | MouseEvent) => {
-        event.preventDefault()
         if (EVENT_TYPE[event.type] !== this.initiated) {
             return
         }
@@ -180,7 +193,6 @@ class IKun {
     }
 
     end = (event: TouchEvent | MouseEvent) => {
-        event.preventDefault()
         if (EVENT_TYPE[event.type] !== this.initiated) {
             return
         }
@@ -197,13 +209,13 @@ class IKun {
             dancing.pause()
             crazy.pause()
         }
-        if (Math.abs(this.v.r) > 6 && Math.abs(this.v.r) <= 20) {
+        if (Math.abs(this.v.r) > 6 && Math.abs(this.v.r) <= 30) {
             dancing.currentTime = 0
             dancing.play()
             transient.pause()
             crazy.pause()
         }
-        if (Math.abs(this.v.r) > 20) {
+        if (Math.abs(this.v.r) > 30) {
             crazy.currentTime = 0
             crazy.play()
             transient.pause()

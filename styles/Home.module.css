@@ -10,10 +10,24 @@
     bottom: 0;
 }
 
-.btn {
+.options {
     position: fixed;
     right: 10px;
     top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 999;
+}
+
+.bgm {
+    padding: 10px 0 0 0;
+    border: 0;
+    background-color: transparent;
+}
+
+.mute {
+    color: #666;
 }
 
 .github {
