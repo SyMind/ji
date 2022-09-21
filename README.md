@@ -10,6 +10,8 @@ Kun-Kun 舞蹈模拟器！
 
 目前还有很多 bug，作为 iKun 的我还在努力修复中，今天也是为哥哥努力的一天呢！
 
+# 实现参考[🐟「Sakana!」石蒜模拟器](https://github.com/itorr/sakana)
+
 # 本地运行
 
 使用 yarn 安装依赖。
