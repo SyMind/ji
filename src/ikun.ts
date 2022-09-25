@@ -69,6 +69,9 @@ class IKun {
     height = 800
     width = 500
 
+    imageHeight = 300
+    imageWidth = 197
+
     constructor({container, muted = false}: IKunOptions) {
         this.muted = muted
 
@@ -91,6 +94,7 @@ class IKun {
         outline.style.left = '50%'
         outline.style.top = '50%'
         outline.style.transform = 'translate(-50%, -50%)'
+        outline.style.display = 'flex'
         outline.appendChild(image)
 
         const dpr = window.devicePixelRatio || 1
@@ -174,13 +178,13 @@ class IKun {
         }
 
         const touch = 'targetTouches' in event ? event.touches[0] : event
-        const rect = this.image.getBoundingClientRect()
+        const rect = this.container.getBoundingClientRect()
         const leftCenter = rect.left + rect.width / 2
         const { pageX, pageY } = touch
 
         const x = pageX - leftCenter
         let y = pageY - this.pageY
-       
+
         let r = x * this.sticky
 
         r = Math.max(-this.maxR, r)
@@ -250,32 +254,20 @@ class IKun {
         context.lineWidth = 10
     
         context.beginPath()
-        context.translate(
-            width / 2 ,
-            640 // height - 160
-        )
         context.moveTo(
-            0,
-            200
+            this.width / 2,
+            this.height
         )
-    
-        const cx = 0
-        const cy = -100
-    
-        const n = rotatePoint(
-            cx,
-            cy,
-            r,
-            -y,
-            r
-        )
-    
-        const nx = n.x
-        const ny = -n.y - 100
+
+        const angle = Math.PI / 180 * r
+        const cos = Math.cos(angle)
+        const sin = Math.sin(angle)
+        const nx = cos * x - sin * (150 + y) + this.width / 2
+        const ny = sin * x + cos * (150 + y) + this.height / 2 + this.imageHeight / 2 - 150
         
         context.quadraticCurveTo(
-            0,
-            75,
+            this.width / 2,
+            this.height - 100,
             nx,
             ny
         )
