@@ -4,7 +4,7 @@
 
 <p align="center">请 Star 🌟 这个项目来表达你对坤坤的喜爱 ❤️ 和支持。</p>
 
-# 🐓 只因你太美
+# 🐔🏀 [只因你太美](https://symind.github.io/ji)
 
 Kun-Kun 舞蹈模拟器！
 
